@@ -16,4 +16,9 @@ public class Spiel {
     public void rundeSpielen() {
 
     }
+
+    public String gewinnerErnennen() {
+
+        return null; // TODO gewinnername
+    }
 }

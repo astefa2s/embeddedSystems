@@ -6,9 +6,4 @@ public class BlackJackRegeln implements Regeln {
     public void kartenVergleichen() {
 
     }
-
-    @Override
-    public void gewinnerErnennen() {
-
-    }
 }
