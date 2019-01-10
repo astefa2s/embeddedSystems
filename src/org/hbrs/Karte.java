@@ -2,9 +2,15 @@ package org.hbrs;
 
 public class Karte {
 
-    private String typ;
+    private String typ; // TODO enum machen
     private int zahl;
     private int wert;
+
+    public Karte(String typ, int zahl, int wert) {
+        this.typ = typ;
+        this.zahl = zahl;
+        this.wert = wert;
+    }
 
     public int getZahl() {
         return zahl;
