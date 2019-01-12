@@ -2,11 +2,11 @@ package org.hbrs;
 
 public class Karte {
 
-    private String typ; // TODO enum machen
+    private KartenTyp typ;
     private int zahl;
     private int wert;
 
-    public Karte(String typ, int zahl, int wert) {
+    public Karte(KartenTyp typ, int zahl, int wert) {
         this.typ = typ;
         this.zahl = zahl;
         this.wert = wert;
@@ -28,11 +28,11 @@ public class Karte {
         this.wert = wert;
     }
 
-    public String getTyp() {
+    public KartenTyp getTyp() {
         return typ;
     }
 
-    public void setTyp(String typ) {
+    public void setTyp(KartenTyp typ) {
         this.typ = typ;
     }
 }

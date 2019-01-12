@@ -2,21 +2,34 @@ package org.hbrs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class BlackJackRegeln implements Regeln {
 
     @Override
-    public void kartenVergleichen() {
+    public Spieler kartenVergleichen(List<Spieler> aktiveRundenSpieler) {
+        Spieler bester = aktiveRundenSpieler.get(0);
+        for (Spieler spieler: aktiveRundenSpieler) {
+            int handwert = spieler.getHand().totalHandWert();
+            System.out.println("Kartenwert von spieler " + spieler.getName() + " = " + handwert);
 
+            if (handwert > bester.getHand().totalHandWert()) {
+                // dieser Spieler ist neuer bester
+                bester = spieler;
+            }
+        }
+
+        return bester;
     }
 
     @Override
-    public List<Karte> deckErzeugen(){
-        List<Karte> deck = new ArrayList<Karte>();
+    public Stack<Karte> deckErzeugen(){
+        Stack<Karte> deck = new Stack<Karte>();
 
-        // TODO je nachdem welche Karten benötigt werden
-        for (int i = 2; i < 15; i++) {
-            for (int j = 0; j < 4; j++) { // TODO durch enum KartenTyp ersetzten
+        // Karten Zahl: 2 - 14
+        for (int i = 2; i <= 14; i++) {
+
+            for (KartenTyp typ: KartenTyp.values()) {
                 int wert = i;
                 if (i > 10) {
                     wert = 10;
@@ -24,7 +37,7 @@ public class BlackJackRegeln implements Regeln {
                 if (i == 14) {
                     wert = 11;
                 }
-                Karte karte = new Karte("j", i, wert);
+                Karte karte = new Karte(typ, i, wert);
 
                 deck.add(karte);
             }

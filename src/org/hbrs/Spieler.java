@@ -1,5 +1,7 @@
 package org.hbrs;
 
+import java.util.Scanner;
+
 public class Spieler {
 
     private int vermoegen;
@@ -36,21 +38,30 @@ public class Spieler {
         this.hand = hand;
     }
 
+    public void handLeeren() {
+        setHand(new Hand());
+    }
+
     /*
      * Mindesteinsatz
+     * TODO die Logik für Input/Output in eigene GUI Klasse verschieben
+     * TODO Dabei eventuell Pattern anwenden (strategy zum Beispiel)
      */
     public int geldSetzten(int mindesteinsatz) {
         int einsatz = -1;
-        System.out.println("Bitte Geld setzten. Mindesteinsatz: "+ mindesteinsatz + " ; Vermögen: " + vermoegen);
+        System.out.println(this.getName() + " bitte Geld setzten. Mindesteinsatz: "+ mindesteinsatz + " ; Vermögen: " + vermoegen);
         // TODO Spieler fragen und setzten
         // Konsoleneingabe lesen
+        Scanner scanner = new Scanner(System.in);
+        einsatz = scanner.nextInt();
+
 
         if (einsatz > vermoegen) {
             System.out.println("Sie haben nicht so viel Geld");
             einsatz = -1;
         }
 
-        if (einsatz <= mindesteinsatz) {
+        if (einsatz < mindesteinsatz) {
             System.out.println("Sie haben weniger als den Mindesteinsatz gesetzt");
             einsatz = -1;
         }
@@ -59,7 +70,6 @@ public class Spieler {
     }
 
     public void vermoegenAktualisieren(int differenz) {
-        // TODO nach Runde entweder gewonnen oder verloren
         vermoegen += differenz;
     }
 }

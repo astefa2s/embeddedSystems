@@ -1,41 +1,90 @@
 package org.hbrs;
 
-import java.util.HashMap;
-import java.util.List;
+import sun.security.provider.ConfigFile;
+
+import java.util.*;
 
 public class Spiel {
 
     private Regeln regeln = new BlackJackRegeln();
-    private List<Karte> deck = regeln.deckErzeugen();
-    private List<Spieler> spieler;
+    private Stack<Karte> deck = regeln.deckErzeugen();
+    private List<Spieler> spieler = new ArrayList<Spieler>();
+    // Liste von Spieler, die nicht rausgegangen sind
+    private List<Spieler> aktiveRundenSpieler;
     private Spieler dealer = new Spieler(1000, "dealer");
-    private HashMap<Spieler, Integer> rundenEinsatz;
+    private HashMap<Spieler, Integer> rundenEinsatz = new HashMap<Spieler, Integer>();
 
     public void deckMischen(){
-        // TODO List Mischen Algorithmus online suchen
+        Collections.shuffle(deck);
     }
 
+    /*
+     * Methode für eine Runde bis aufgelöst wird und einer das Geld erhält.
+     * In jeder dieser Runden kann jeder Spieler mitgehen oder raus gehen.
+     */
     public void rundeSpielen() {
+        // Zu Beginn einer Runde spielen alle Spieler mit
+        ArrayList<Spieler> temp = (ArrayList<Spieler>) spieler;
+        aktiveRundenSpieler = (ArrayList<Spieler>) temp.clone();
+
+        Collections.copy(aktiveRundenSpieler, spieler);
+
         deckMischen();
-        // TODO Einsätze abholen
+
         int aktuellerEinsatz = 0;
-        // TODO Logik einbauen, dass Spieler die raus gegangen sind nicht mehr abgefragt werden
-        for (Spieler spieler: spieler) {
+
+        // Einsätze sammeln
+        for (Spieler spieler: aktiveRundenSpieler) {
             int spielerEinsatz = spieler.geldSetzten(aktuellerEinsatz);
-            rundenEinsatz.put(spieler, spielerEinsatz);
 
             if (spielerEinsatz >= aktuellerEinsatz) {
+                // Spieler bleibt drin
                 aktuellerEinsatz = spielerEinsatz;
+                rundenEinsatz.put(spieler, spielerEinsatz);
+            } else {
+                // Spieler ist raus gegangen
+                aktiveRundenSpieler.remove(spieler);
             }
+
         }
-        // TODO karten vergleichen
-        regeln.kartenVergleichen(); // TODO SpielerListe übergeben
+
+        // Karten Verteilen
+        for (Spieler spieler: aktiveRundenSpieler) {
+            // Oberste Karte vom deck an die Spieler verteilen
+            Karte karte = deck.pop();
+            spieler.getHand().karteHinzufuegen(karte);
+        }
+        Karte karte = deck.pop();
+        dealer.getHand().karteHinzufuegen(karte);
+
+        // TODO Spieler dürfen beliebig oft Karten ziehen
+        // unabhängig von einander
+        // nur wenn sie wollen
+
+        // Gewinner bestimmen
+        Spieler rundenGewinner = regeln.kartenVergleichen(aktiveRundenSpieler);
+
+        // Einsätze von jedem Spieler wegnehmen und gewinner geben
+        for (Spieler spieler: spieler) {
+            int spielerEinsatz = rundenEinsatz.remove(spieler);
+            spieler.vermoegenAktualisieren(-spielerEinsatz);
+
+            rundenGewinner.vermoegenAktualisieren(spielerEinsatz);
+            spieler.handLeeren();
+        }
+
     }
 
     // nur am Ende des Spiels
     public String gewinnerErnennen() {
-
-        return null; // TODO gewinnername
+        Spieler gewinner = spieler.get(0);
+        for (Spieler spieler: spieler) {
+            int vermoegen = spieler.getVermoegen();
+            if (vermoegen > gewinner.getVermoegen()) {
+                gewinner = spieler;
+            }
+        }
+        return gewinner.getName();
     }
 
     public void spielerRegistrieren(Spieler spieler) {

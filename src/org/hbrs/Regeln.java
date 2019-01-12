@@ -1,11 +1,12 @@
 package org.hbrs;
 
 import java.util.List;
+import java.util.Stack;
 
 public interface Regeln {
 
-    public void kartenVergleichen();
+    public Spieler kartenVergleichen(List<Spieler> aktiveRundenSpieler);
 
-    public List<Karte> deckErzeugen();
+    public Stack<Karte> deckErzeugen();
 
 }
