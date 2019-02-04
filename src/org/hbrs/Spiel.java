@@ -18,6 +18,7 @@ public class Spiel {
         Collections.shuffle(deck);
     }
 
+    // TODO Dealer Beteiligung implementieren
     /*
      * Methode für eine Runde bis aufgelöst wird und einer das Geld erhält.
      * In jeder dieser Runden kann jeder Spieler mitgehen oder raus gehen.

@@ -8,10 +8,12 @@ import java.util.Scanner;
 public class SpielTest {
     public static void main(String[] args) {
         Spiel spiel = new Spiel();
-        Spieler spieler1 = new Spieler(100, "S1");
-        Spieler spieler2 = new Spieler(100, "S2");
+        Spieler spieler1 = new Spieler(100, "Spieler1");
+        Spieler spieler2 = new Spieler(100, "Spieler2");
+        Spieler spieler3 = new Spieler(100, "Spieler3");
         spiel.spielerRegistrieren(spieler1);
         spiel.spielerRegistrieren(spieler2);
+        spiel.spielerRegistrieren(spieler3);
 
         spiel.rundeSpielen();
 
